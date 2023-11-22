@@ -1,27 +1,37 @@
-const mongoose = require('mongoose')
-const { schema } = require('..')
+const {Schema, model} = require("mongoose");
+const reactionSchema = require('./Reaction.js')
 
-const thoughtSchema = new mongoose.Schema ({
-    text: {
-        type: String,
-        required: true
+
+const thoughtSchema = new Schema(
+    {
+        text: {
+            type: String,
+            required: true,
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now,
+        },
+        username: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
+        reaction: [reactionSchema],
     },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
-    username:[{
-        type: Schema.Type.ObjectId,
-        ref: 'User'
-    }],
-    reaction:[{
-        type: Schema.Type.ObjectId,
-        ref: 'Reaction'
-    }],
-},
-{
-    toJSON:{
-        virtuals: true
-    },
-    id: false
+    {
+        toJSON: {
+            virtuals: true,
+        },
+        id: false,
+    }
+);
+
+thoughtSchema.virtual("reactCount").get(function () {
+    return this.reaction.length;
 });
+
+const Thought = model("Thought", thoughtSchema);
+
+module.exports = Thought;

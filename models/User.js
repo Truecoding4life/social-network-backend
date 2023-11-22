@@ -1,12 +1,13 @@
-const mongoose = require("mongoose");
+const {Schema, model} = require("mongoose");
 
 // Create an user schema
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema(
   {
     username: {
       type: String,
       required: true,
-      unique: true, // Ensure the field is unique
+      unique: true,
+      minlength: 4, // Ensure the field is unique
       validate: {
         validator: function (value) {
           return /^[a-zA-Z0-9_]+$/.test(value);
@@ -58,7 +59,7 @@ userSchema
   })
 
 // Create Model User
-const User = mongoose.model("User", userSchema);
+const User = model("User", userSchema);
 
 // Export User Model
 
