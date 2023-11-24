@@ -33,5 +33,23 @@ router.post('/', async (req, res) => {
     }
 });
 
+// update user by id
+router.put('/:id', async (req, res) => {
+    try{
+        const users = await User.findOneAndUpdate(
+            { _id: req.params.userId },
+            { $set: req.body },
+            { runValidators: true, new: true }
+          );
+          if (!users) {
+            return res.status(404).json({ message: 'No User with this id!' });
+          }
+    
+          res.json(users);
+    } catch(err) {
+        res.status(500).json(err);
+    }
+});
 
+;
 module.exports = router;
