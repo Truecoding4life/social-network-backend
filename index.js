@@ -26,49 +26,49 @@ db.once('open', () => {
 
 
 
-const { Schema, model } = require('mongoose');
-const Tag = require('./Tag');
+// const { Schema, model } = require('mongoose');
+// const Tag = require('./Tag');
 
-// Schema to create Post model
-const applicationSchema = new Schema(
-  {
-    published: {
-      type: Boolean,
-      default: false,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-    buildSuccess: {
-      type: Boolean,
-      default: true,
-    },
-    description: {
-      type: String,
-      minLength: 15,
-      maxLength: 500,
-    },
-    tags: [Tag],
-  },
-  {
-    toJSON: {
-      virtuals: true,
-    },
-    id: false,
-  }
-);
+// // Schema to create Post model
+// const applicationSchema = new Schema(
+//   {
+//     published: {
+//       type: Boolean,
+//       default: false,
+//     },
+//     createdAt: {
+//       type: Date,
+//       default: Date.now,
+//     },
+//     buildSuccess: {
+//       type: Boolean,
+//       default: true,
+//     },
+//     description: {
+//       type: String,
+//       minLength: 15,
+//       maxLength: 500,
+//     },
+//     tags: [Tag],
+//   },
+//   {
+//     toJSON: {
+//       virtuals: true,
+//     },
+//     id: false,
+//   }
+// );
 
-// Create a virtual property `getTags` that gets the amount of tags associated with an application
-applicationSchema
-  .virtual('getTags')
-  // Getter
-  .get(function () {
-    return this.tags.length;
-  });
+// // Create a virtual property `getTags` that gets the amount of tags associated with an application
+// applicationSchema
+//   .virtual('getTags')
+//   // Getter
+//   .get(function () {
+//     return this.tags.length;
+//   });
 
-// Initialize our Application model
-const Application = model('application', applicationSchema);
+// // Initialize our Application model
+// const Application = model('application', applicationSchema);
 
-module.exports = Application;
+// module.exports = Application;
 

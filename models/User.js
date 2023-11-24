@@ -26,6 +26,11 @@ const userSchema = new Schema(
         message: "Invalid email address",
       },
     },
+    password: {
+      type: String,
+      required: true,
+      minlength: 8,
+    },
     createdAt: {
       type: Date,
       default: Date.now,
@@ -33,13 +38,13 @@ const userSchema = new Schema(
     thoughts: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Thoughts",
+        ref: "Thoughts"
       },
     ],
     friends: [
         {
-            type: Schema.Type.ObjectId,
-            ref: "User",
+            type: Schema.Types.ObjectId,
+            ref: "User"
         }
     ]
   },
