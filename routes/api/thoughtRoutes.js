@@ -30,23 +30,43 @@ router.get('/', async (req, res) => {
 // update a thought by id
 router.put('/:id', async (req, res) => {
     try {
-        const thoughtData = await Thought.findOneAndUpdate(
+        const thoughtUpdate = await Thought.findOneAndUpdate(
             { _id: req.params.id },
             { $set: {thoughText: req.body.thoughText} },
             { runValidators: true, new: true }
           );
-          if (!thoughtData) {
+          if (!thoughtUpdate) {
             return res.status(404).json({ message: 'No Thought with this id!' });
           }
     
-          res.json(thoughtData);
+          res.json(thoughtUpdate);
         
-        res.status(200).json(thoughtData);
+        res.status(200).json(thoughtUpdate);
     } catch(err) {
         res.status(500).json(err);
     }
 });
 
+
+// delete a thought by id
+
+router.delete('/:id', async (req, res) => {
+    try {
+        const thoughtDeletion = await Thought.findOneAndDelete({ _id: req.params.id });
+        const userDeleteKey = await User.findOneAndUpdate(
+            { "_id": req.body.userId },
+            { $pull: { thoughts: req.params.id } },
+            { new: true}
+        );
+        if (!thoughtDeletion) {
+            return res.status(404).json({ message: 'No Thought with this id!' });
+          }
+    
+          res.json(thoughtDeletion);
+    } catch(err) {
+        res.status(500).json(err);
+    }
+});
 
 
 module.exports = router;
