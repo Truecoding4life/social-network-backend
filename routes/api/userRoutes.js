@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 // get one user by id TESTED
 router.get('/:id', async (req, res) => {
     try {
-        const getOneUser = await User.findOne({ _id: req.params.id });
+        const getOneUser = await User.findOne({ _id: req.params.id }).populate({ path: 'thoughts', select: '-__v' });;
         res.status(200).json(getOneUser);
         if(!getOneUser) {
             return res.status(404).json({ message: 'No User with this id!' });
