@@ -16,6 +16,7 @@ router.post('/', async (req, res) => {
         res.status(500).json(err);
     }
 });
+
 // Get all thought
 router.get('/', async (req, res) => {
     try {
@@ -25,6 +26,27 @@ router.get('/', async (req, res) => {
         res.status(500).json(err);
     }
 });
+
+// update a thought by id
+router.put('/:id', async (req, res) => {
+    try {
+        const thoughtData = await Thought.findOneAndUpdate(
+            { _id: req.params.id },
+            { $set: {thoughText: req.body.thoughText} },
+            { runValidators: true, new: true }
+          );
+          if (!thoughtData) {
+            return res.status(404).json({ message: 'No Thought with this id!' });
+          }
+    
+          res.json(thoughtData);
+        
+        res.status(200).json(thoughtData);
+    } catch(err) {
+        res.status(500).json(err);
+    }
+});
+
 
 
 module.exports = router;
