@@ -43,7 +43,7 @@ const thoughtSchema = new Schema(
         username: [
             {
                 type: Schema.Types.ObjectId,
-                ref: "User",
+                ref: "user",
             },
         ],
         reaction: [reactionSchema],
@@ -60,6 +60,6 @@ thoughtSchema.virtual("reactionCount").get(function () {
     return this.reaction.length;
 });
 
-const Thought = model("thought", thoughtSchema);
+const Thought = model("thoughts", thoughtSchema);
 
 module.exports = Thought;

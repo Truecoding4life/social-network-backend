@@ -5,7 +5,8 @@ const User = require('../../models/User');
 // get all users TESTED
 router.get('/', async (req, res) => {
     try {
-        const userData = await User.find({});
+        const userData = await User.find()
+        .populate({ path: 'thoughts', select: '-__v' });
         res.status(200).json(userData);
     } catch(err) {
         res.status(500).json(err);
@@ -62,7 +63,7 @@ router.delete('/:id', async (req, res) => {
         if (!userDeletion) {
             return res.status(404).json({ message: 'No User with this id!' });
         }
-        res.status(200).json(userDeletion);
+        res.status(200).json("User has been deleted!");
     } catch(err) {
         res.status(500).json(err);
     }
