@@ -2,7 +2,7 @@ const router = require('express').Router();
 const User = require('../../models/User');
 
 
-// get all users
+// get all users TESTED
 router.get('/', async (req, res) => {
     try {
         const userData = await User.find({});
@@ -12,28 +12,31 @@ router.get('/', async (req, res) => {
     }
 });
 
-// get one user by id
+// get one user by id TESTED
 router.get('/:id', async (req, res) => {
     try {
-        const userData = await User.findOne({ _id: req.params.id });
-        res.status(200).json(userData);
+        const getOneUser = await User.findOne({ _id: req.params.id });
+        res.status(200).json(getOneUser);
+        if(!getOneUser) {
+            return res.status(404).json({ message: 'No User with this id!' });
+        }
     } catch(err) {
         res.status(500).json(err);
     }
 });
 
 
-// create new user
+// create new user TESTED
 router.post('/', async (req, res) => {
     try {
-        const userData = await User.create(req.body);
-        res.status(200).json(userData);
+        const userCreation = await User.create(req.body);
+        res.status(200).json(userCreation);
     } catch(err) {
         res.status(400).json(err);
     }
 });
 
-// update user by id
+// update user by id TESTED
 router.put('/:id', async (req, res) => {
     try{
         const users = await User.findOneAndUpdate(
@@ -51,5 +54,18 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-;
+
+// delete user by id
+router.delete('/:id', async (req, res) => {
+    try {
+        const userDeletion = await User.findOneAndDelete({ _id: req.params.id });
+        if (!userDeletion) {
+            return res.status(404).json({ message: 'No User with this id!' });
+        }
+        res.status(200).json(userDeletion);
+    } catch(err) {
+        res.status(500).json(err);
+    }
+});
+
 module.exports = router;
