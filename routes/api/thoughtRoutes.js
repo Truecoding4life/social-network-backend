@@ -38,7 +38,7 @@ router.put("/:id", async (req, res) => {
     if (!thoughtUpdate) {
       return res.status(404).json({ message: "No Thought with this id!" });
     }
-    
+
     res.status(200).json(thoughtUpdate);
   } catch (err) {
     res.status(500).json(err);
@@ -48,7 +48,7 @@ router.put("/:id", async (req, res) => {
 // Force delete all thoughts
 router.delete("/delete", async (req, res) => {
   const thoughtDeletion = await Thought.deleteMany({});
-  res.json(thoughtDeletion);
+  res.json("All thoughts have been deleted!");
 });
 
 // delete a thought by id
@@ -66,7 +66,7 @@ router.delete("/:id", async (req, res) => {
       return res.status(404).json({ message: "No Thought with this id!" });
     }
 
-    res.json(thoughtDeletion);
+    res.json("Thought has been deleted!");
   } catch (err) {
     res.status(500).json(err);
   }
