@@ -1,153 +1,152 @@
-# Social Network Backend
-
 [![License: CC0-1.0](https://licensebuttons.net/l/zero/1.0/80x15.png)](http://creativecommons.org/publicdomain/zero/1.0/)
 
+# Social Network Backend
+
 ### Resources
+
 [GitHub Repository](https://github.com/Truecoding4life/Developer-blog-with-model-view-control)
 
-[Deployed Link](https://developer-blogpost-a4d9376f41de.herokuapp.com/dashboard)
+[Demonstration video](https://developer-blogpost-a4d9376f41de.herokuapp.com/dashboard)
 
 [Jay's Studio](https://truecoding4life.github.io/Jaystudio/)
 
-
-
-
+---
 
 #### Table of Contents
-* [Resources](#resources)
-* [Description](#description)
-* [Technologies Used](#technologies-used)
-* [Installation](#installation)
 
-
-
-
----
-
-
-
-
-
-## Description 
-
-
-
-
-
+- [Resources](#resources)
+- [Description](#description)
+- [Development](#development)
+- [Technologies Used](#technologies-used)
+- [Installation](#installation)
 
 ---
 
+## Description
+While traditional databases like MySQL provide a structured approach to data storage, MongoDB offers a more flexible and easy-to-work-with NoSQL database structure. Join me on a journey to explore how I've optimized this NoSQL database to power the backend of our application. Discover the advantages of a less rigid data model and the streamlined development experience MongoDB brings to the table.
 
 
+## Development
 
+### NoSQL Database Structure
 
-### User Interface
+NoSQL Database like MongooseDB offer a less rigid and easy to work with data model using nested object
 
-
-
-
-
----
-![User Interface]()
----
-
-
-
-
-
-
-# Technologies Used
-
-
-**sequelize:** Sequelize is a powerful Object-Relational Mapping (ORM) library for Node.js that simplifies database interactions. It provides an easy-to-use API for defining data models, executing queries, and handling relationships between database tables.
-
-
-**Bootstrap:** Bootstrap is a widely used front-end framework that provides a collection of pre-designed and responsive CSS and JavaScript components. It simplifies web development by offering ready-made templates, layouts, and UI elements, enabling developers to create visually appealing and mobile-friendly web applications quickly.
-
-**Handlebars:** Handlebars is a templating engine that streamlines the process of generating dynamic HTML content in web applications. It allows developers to create reusable templates with placeholders, making it easy to insert data dynamically into web pages.
-
-**JavaScript:** JavaScript is a versatile and widely used programming language for web development. It enables you to add interactivity, manipulate the DOM (Document Object Model), and perform various client-side actions in web applications.
-
-**Node.js:** Node.js is a server-side JavaScript runtime that allows developers to build scalable and efficient network applications. It provides a non-blocking, event-driven architecture that is particularly well-suited for creating server-side applications.
-
-**Express Node.js:** Express.js is a minimal and flexible web application framework for Node.js. It simplifies the creation of web servers and the development of web applications by providing essential features and middleware for routing, handling requests, and more.
-
-**bcrypt:** bcrypt is a password-hashing library used for securely storing user passwords. It employs a one-way hashing algorithm, making it difficult for attackers to reverse-engineer stored passwords.
-
-**connect-session-sequelize:** connect-session-sequelize is a middleware for Express.js that facilitates the integration of session management using Sequelize, a popular Object-Relational Mapping (ORM) library for Node.js. It enables the secure storage of user session data in a database.
-
-**dotenv:** dotenv is a module that simplifies the management of environment variables in Node.js applications. It allows you to store configuration settings in a .env file, making it easy to maintain and protect sensitive information.
-
-**express-session:** express-session is a middleware for Express.js that handles user sessions in web applications. It manages the session state and enables user-specific data to persist across multiple HTTP requests.
-
-**mysql2:** mysql2 is a Node.js-based MySQL driver that simplifies the interaction with MySQL databases. It allows you to establish database connections, execute queries, and manage data effectively.
-
-**path:** The 'path' module in Node.js provides utilities for working with file and directory paths. It simplifies tasks such as joining, normalizing, and resolving paths, which is particularly useful for file I/O operations.
-
-
-**sess:** The 'sess' (possibly related to session) component likely refers to a custom module or script you've developed for your web application. It may be used for managing user sessions or handling other specific functionalities within your project.
-
-**route-express middleware:** Route-Express middleware is a custom middleware component developed for your web application using the Express.js framework. It is used to handle routing and request processing in a way that is specific to your project's requirements. This middleware likely plays a key role in managing the flow of incoming requests and their respective routes within your application, allowing for custom handling of various routes and actions.
+```
+const thoughtSchema = new Schema(
+  {
+    thoughText: { type: String, required: true },
+    createdAt: { type: Date, default: Date.now },
+    username: [{ type: Schema.Types.ObjectId, ref: "user",},],
+    reaction: [reactionSchema],},
+  {
+    toJSON: {
+      virtuals: true,
+    },
+    id: false,
+  }
+);
+```
 
 ---
 
+### Using Regex to Validate Email
 
+Over the course of this homework assignment, I take advantage of the use for Regex to validate username and email. [check out my tutorial about this](https://gist.github.com/Truecoding4life/613f04cc85d5c1c9cea3ec32ba87d318)
 
+```
+    email: {
+      type: String,
+      required: true,
+      validate: {
+        validator: function (value) {
 
+          return /\S+@\S+\.\S+/.test(value);
 
+        },
+        message: "Invalid email address",
+      },
+    },
 
-### Installation
-
-
-
-
-
----
-
-
-
-## Designing Process
-I spent most of my time of constructing a clear idea of what my model and files directories going to looks like, then I went on and map out what each directories should include following the Model-View-Control setup.
-
-#### PSEUDO-CODE
-
-
-
-#### MODELS
-
-
-
-
-#### VIEWS
-
-
-
-#### CONTROLLERS
-
-
-
-#### Basics
-
-
-#### SERVER
-
-
-
-#### MODEL
-
-
-
-
+```
 
 ---
 
+### Code highlight
+Because MongoDB use object to structural database, when we need to delete a sub-document we must access it from it parent object, here you can see I'm trying to delete Reaction that nested in Thought, in order to remove reaction I use the **$pull** operation from MongoDB to extract Reaction out from Thought.
+
+```
+router.delete("/:thoughtId/reactions/:reactionId", async (req, res) => {
+  try {
+    const thoughtDeleteReaction = await Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $pull: { reaction: { _id: req.params.reactionId } } },
+      { runValidators: true, new: true }
+    );
+    if (!thoughtDeleteReaction) {
+      return res
+        .status(404)
+        .json({ message: "No reaction found with this id!" });
+    }
+    res.status(200).json(thoughtDeleteReaction);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+```
 
 
 
 
+## Technologies Used
+
+![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![Nodemon](https://img.shields.io/badge/NODEMON-%23323330.svg?style=for-the-badge&logo=nodemon&logoColor=%BBDEAD)
+![Github Pages](https://img.shields.io/badge/github%20pages-121013?style=for-the-badge&logo=github&logoColor=white)
+![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)
+![Insomnia](https://img.shields.io/badge/Insomnia-black?style=for-the-badge&logo=insomnia&logoColor=5849BE)
+
+---
+
+### Installation Guide
+
+**Clone the Repository:**
+```
+git clone https://github.com/your-username/your-application.git
+cd your-application
+
+```
+**Install Dependencies:**
+
+```
+npm install
+
+```
+
+**Run the Application:**
+
+```
+npm start
+This will start your application. By default, it might run on http://localhost:3000.
+
+```
+
+**Testing API Routes:**
+
+I recommend using Insomnia for testing API routes.
+Import your API specifications into Insomnia and start testing.
+Insomnia provide clear API documentation so users understand the available routes and functionalities. 
+
+
+Document doesn't require any authentication or additional configuration.
+Enjoy Exploring!
+
+
+---
 
 #### This README was generated based on the Good README Guide
 
-
-
-This Website is made available by © Jay's Studio 
+This Website is made available by © Jay's Studio 2023
