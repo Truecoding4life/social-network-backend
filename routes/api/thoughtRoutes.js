@@ -4,15 +4,15 @@ const User = require("../../models/User");
 
 // Get a thought
 router.get("/:id", async (req, res) => {
-    try{
-        const getOneThought = await Thought.findOne({ _id: req.params.id });
-        res.status(200).json(getOneThought);
-        if(!getOneThought) {
-            return res.status(404).json({ message: 'No Thought with this id!' });
-        }
-    } catch(err) {
-        res.status(500).json("System error!");
+  try {
+    const getOneThought = await Thought.findOne({ _id: req.params.id });
+    res.status(200).json(getOneThought);
+    if (!getOneThought) {
+      return res.status(404).json({ message: "No Thought with this id!" });
     }
+  } catch (err) {
+    res.status(500).json("System error!");
+  }
 });
 
 // Get all thought
@@ -84,5 +84,39 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+// Create a reaction
+router.post("/:thoughtId/reactions", async (req, res) => {
+  try {
+    const reactionCreation = await Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $addToSet: { reaction: req.body } },
+      { new: true }
+    );
+    res.status(200).json(reactionCreation);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// Delete a reaction
+router.delete("/:thoughtId/reactions/:reactionId", async (req, res) => {
+  try {
+    const thoughtDeleteReaction = await Thought.findOneAndUpdate(
+      { _id: req.params.thoughtId },
+      { $pull: { reaction: { _id: req.params.reactionId } } },
+      { runValidators: true, new: true }
+    );
+    if (!thoughtDeleteReaction) {
+      return res
+        .status(404)
+        .json({ message: "No reaction found with this id!" });
+    }
+    res.status(200).json(thoughtDeleteReaction);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 
 module.exports = router;

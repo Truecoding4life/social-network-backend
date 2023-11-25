@@ -3,9 +3,9 @@ const {Schema, model} = require("mongoose");
 
 const reactionSchema = Schema( {
     id:{
-        type: Number,
-        Required: true
-    },
+        type: Schema.Types.ObjectId,
+        default: () => new Types.ObjectId(),
+      },
     body:{
         type: String,
         required: true
@@ -30,7 +30,7 @@ const reactionSchema = Schema( {
 
 
 const thoughtSchema = new Schema(
-    {
+    {   
         thoughText: {
             type: String,
             required: true,
