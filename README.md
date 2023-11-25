@@ -3,12 +3,13 @@
 # Social Network Backend
 
 ### Resources
+[Jay's Studio](https://truecoding4life.github.io/Jaystudio/)
 
 [GitHub Repository](https://github.com/Truecoding4life/Developer-blog-with-model-view-control)
 
 [Demonstration video](https://watch.screencastify.com/v/kb3UyX4Bhzj8ngbcMswR)
 
-[Jay's Studio](https://truecoding4life.github.io/Jaystudio/)
+
 
 ---
 
@@ -22,10 +23,24 @@
 
 ---
 
+
+
 ## Description
 While traditional databases like MySQL provide a structured approach to data storage, MongoDB offers a more flexible and easy-to-work-with NoSQL database structure. Join me on a journey to explore how I've optimized this NoSQL database to power the backend of our application. Discover the advantages of a less rigid data model and the streamlined development experience MongoDB brings to the table.
 
+---
 
+
+### Features
+One of the feature that makes this application stand out is the friend features, here is what I mean.
+
+User can could establish an association with other users in the same database
+
+![Add Friend](./Assets/addF.gif)
+
+This demonstrate how delete friend work when fetching with Insomnia
+
+![Remove Friend](./Assets/ezgif.com-video-to-gif.gif)
 ## Development
 
 ### NoSQL Database Structure
