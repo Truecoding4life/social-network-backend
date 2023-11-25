@@ -2,6 +2,19 @@ const router = require("express").Router();
 const Thought = require("../../models/Thought");
 const User = require("../../models/User");
 
+// Get a thought
+router.get("/:id", async (req, res) => {
+    try{
+        const getOneThought = await Thought.findOne({ _id: req.params.id });
+        res.status(200).json(getOneThought);
+        if(!getOneThought) {
+            return res.status(404).json({ message: 'No Thought with this id!' });
+        }
+    } catch(err) {
+        res.status(500).json("System error!");
+    }
+});
+
 // Get all thought
 router.get("/", async (req, res) => {
   try {
