@@ -92,4 +92,41 @@ router.post('/:userId/friends/:friendId', async (req, res) => {
     }
 });
 
+// delete all users
+router.delete('/reset', async (req, res) => {
+    try {
+        await User.deleteMany({});
+        res.json("All users have been deleted!");
+    } catch(err) {
+        res.status(500).json(err);
+    }
+});
+
+module.exports = router;
+
+module.exports = router;
+
+// delete friend
+router.delete('/:userId/friends/:friendId', async (req, res) => {
+    try {
+        const deleteFriend = await User.findOneAndUpdate(
+            { _id: req.params.userId },
+            { $pull: { friends: req.params.friendId } },
+            { runValidators: true, new: true }
+          );
+        const deleteFriend2 = await User.findOneAndUpdate(
+            { _id: req.params.friendId },
+            { $pull: { friends: req.params.userId } },
+            { runValidators: true, new: true }
+          );
+          if (!deleteFriend) {
+            return res.status(404).json({ message: 'No User with this id!' });
+          }
+    
+          res.json(deleteFriend2);
+    } catch(err) {
+        res.status(500).json(err);
+    }
+});
+
 module.exports = router;

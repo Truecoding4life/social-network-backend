@@ -6,7 +6,7 @@
 
 [GitHub Repository](https://github.com/Truecoding4life/Developer-blog-with-model-view-control)
 
-[Demonstration video](https://developer-blogpost-a4d9376f41de.herokuapp.com/dashboard)
+[Demonstration video](https://watch.screencastify.com/v/kb3UyX4Bhzj8ngbcMswR)
 
 [Jay's Studio](https://truecoding4life.github.io/Jaystudio/)
 
