@@ -85,6 +85,10 @@ Over the course of this homework assignment, I take advantage of the use for Reg
 
 ```
 
+
+This error is throw by the email validation
+
+![Email Validation](./Assets/Screenshot%202023-11-24%20at%2010.34.06%20PM.png)
 ---
 
 ### Code highlight
