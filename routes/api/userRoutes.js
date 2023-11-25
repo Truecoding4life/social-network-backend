@@ -69,4 +69,27 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+// add friend 
+router.post('/:userId/friends/:friendId', async (req, res) => {
+    try {
+        const addFriend = await User.findOneAndUpdate(
+            { _id: req.params.userId },
+            { $push: { friends: req.params.friendId } },
+            { runValidators: true, new: true }
+          );
+        const addFriend2 = await User.findOneAndUpdate(
+            { _id: req.params.friendId },
+            { $push: { friends: req.params.userId } },
+            { runValidators: true, new: true }
+          );
+          if (!addFriend) {
+            return res.status(404).json({ message: 'No User with this id!' });
+          }
+    
+          res.json(addFriend);
+    } catch(err) {
+        res.status(500).json(err);
+    }
+});
+
 module.exports = router;

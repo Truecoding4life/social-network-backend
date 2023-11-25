@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const {Schema, model} = require("mongoose");
 
 // Create an user schema
 const userSchema = new Schema(
@@ -31,32 +31,37 @@ const userSchema = new Schema(
       required: true,
       minlength: 8,
     },
-
-  // Using the Data method to get the current timestamp
-    createdAt: { type: Date, default: Date.now },
-  
-  // Using the ref property to create a relationship with the Thought model
-    thoughts: {
-      type: Schema.Types.ObjectId,
-      ref: "thoughts",
+    createdAt: {
+      type: Date,
+      default: Date.now,
     },
-    friends: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
-    },
+    thoughts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "thoughts"
+      },
+    ],
+    friends: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "user"
+        }
+    ]
   },
   {
     toJSON: {
-      virtuals: true,
+        virtuals: true,
     },
     id: false,
   }
 );
 
 // Create virtuals
-userSchema.virtual("friendCount").get(function () {
-  return this.friends.length;
-});
+userSchema
+  .virtual('friendCount')
+  .get(function(){
+    return this.friends.length
+  })
 
 // Create Model User
 const User = model("user", userSchema);

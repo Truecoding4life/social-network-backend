@@ -130,7 +130,7 @@ npm install
 
 ```
 npm start
-This will start your application. By default, it might run on http://localhost:3000.
+This will start your application. By default, it might run on http://localhost:3001.
 
 ```
 
