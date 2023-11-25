@@ -31,16 +31,6 @@ While traditional databases like MySQL provide a structured approach to data sto
 ---
 
 
-### Features
-One of the feature that makes this application stand out is the friend features, here is what I mean.
-
-User can could establish an association with other users in the same database
-
-![Add Friend](./Assets/addF.gif)
-
-This demonstrate how delete friend work when fetching with Insomnia
-
-![Remove Friend](./Assets/ezgif.com-video-to-gif.gif)
 ## Development
 
 ### NoSQL Database Structure
@@ -114,7 +104,18 @@ router.delete("/:thoughtId/reactions/:reactionId", async (req, res) => {
 });
 ```
 
+#### Friend Count
+One of the feature that makes this application stand out is the friend features, here is what I meant.
 
+
+Each user have this friend count which indicate how many friend they have, on this example you can see the friend count increase.
+
+
+![Add Friend](./Assets/addF.gif)
+
+In this example the friend count go down after we delete a friend.
+
+![Remove Friend](./Assets/ezgif.com-video-to-gif.gif)
 
 
 ## Technologies Used
